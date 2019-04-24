@@ -19,10 +19,12 @@ def verify(bucket_name):
             succeed("You successfully passed lab 2!")
         else:
             fail("Contents of file 'test.txt' in bucket do not match local file, please try again")
-    except oss2.exceptions.RequestError:
+    except oss2.exceptions.NoSuchBucket:
+        fail("The bucket does not exist, did you verify the correct bucket?")
+    except oss2.exceptions.RequestError as e:
         fail("Could not connect to the bucket, is the internet connection working?")
-    except oss2.exceptions.AccessDenied:
-        fail("Could not authenticate with the bucket, is the name correct?")
+    except oss2.exceptions.AccessDenied as e:
+        fail("Could not authenticate with the bucket, did you configure the Aliyun CLI in lab 0?")
     except Exception as e:
         fail("An unknown error occurred while checking your bucket, please check all steps and try again")
         raise e
